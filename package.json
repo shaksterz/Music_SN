@@ -1,32 +1,33 @@
 {
-  "name": "music_sn",
-  "version": "0.0.0",
-  "description": "Soog Music Social Network",
-  "private": true,
-  "directories": {
-    "doc": "doc",
-    "test": "spec/jasmine_examples",
-    "src": "src"
-  },
-  "scripts": {},
-  "repository": "",
-  "engines": {
-    "node": ">= 0.10.0"
-  },
-  "author": "shaksterz",
-  "license": "MIT",
-  "dependencies": {
-    "express": "^4.13.3",
-    "seraph": "^0.14.0",
-    "seraph-model": "^0.7.5"
-  },
-  "devDependencies": {
-    "babel-preset-es2015": "^6.3.13",
-    "gulp": "^3.9.0",
-    "gulp-babel": "^6.1.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-jasmine": "^2.2.1",
-    "gulp-sourcemaps": "^1.6.0",
-    "jasmine": "^2.4.1"
+    "name": "Music_SN",
+    "version": "0.0.0",
+    "author": "shaksterz",
+    "license": "MIT",
+    "private": true,
+    "directories": {
+        "doc": "doc",
+        "test": "spec",
+        "src": "src"
+    },
+    "scripts": {
+        "start": "node ./bin/www"
+    },
+    "dependencies": {
+        "body-parser": "~1.13.2",
+        "cookie-parser": "~1.3.5",
+        "debug": "~2.2.0",
+        "express": "~4.13.1",
+        "morgan": "~1.6.1",
+        "seraph": "^0.14.0",
+        "seraph-model": "^0.7.5"
+    },
+    "devDependencies": {
+        "babel-preset-es2015": "^6.3.13",
+        "gulp": "^3.9.0",
+        "gulp-babel": "^6.1.1",
+        "gulp-concat": "^2.6.0",
+        "gulp-jasmine": "^2.2.1",
+        "gulp-sourcemaps": "^1.6.0",
+        "jasmine": "^2.4.1",
   }
 }
