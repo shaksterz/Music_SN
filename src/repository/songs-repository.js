@@ -1,7 +1,7 @@
 import seraph from 'seraph';
 import seraphModel from 'seraph-model';
 
-class SongsRepository () {
+class SongsRepository {
     constructor () {
 
     }

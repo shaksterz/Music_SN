@@ -1,4 +1,4 @@
-import songsRoutes from './routes/SongsRouter';
+import songsRoutes from './routes/songs-router';
 
 export default [
     {

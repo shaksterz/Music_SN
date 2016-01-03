@@ -1,8 +1,8 @@
 import express from 'express';
-import service from 'SongsService';
+import SongsService from '../services/songs-service';
 
 var router = express.Router();
-service = new SongsService();
+var service = new SongsService();
 
 /* GET songs listing. */
 router.get('/', function (request, response, next) {
@@ -26,4 +26,4 @@ router.delete('/:songID', function (request, response, next) {
     //service.delete(request.params.songID);
 });
 
-exports default router;
+export default router;

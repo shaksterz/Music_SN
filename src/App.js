@@ -1,14 +1,13 @@
 import express from 'express';
 import path from 'path';
-import favicon from 'serve-favicon';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import http from 'http';
 
-import ServerEvents from 'ServerEvents';
-import ErrorHandler from 'ErrorHandler';
-import routes from 'Routes';
+import ServerEvents from './server-events';
+import ErrorHandler from './error-handler';
+import routes from './routes';
 
 var app = express();
 
@@ -52,4 +51,4 @@ app.set('port', port);
 var server = http.createServer(app);
 server.listen(port);
 server.on('error', serverEvents.onError);
-server.on('listening', serverEvents.onListening);
+server.on('listening', serverEvents.onListening(server.address));

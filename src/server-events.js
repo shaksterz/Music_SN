@@ -49,11 +49,12 @@ class ServerEvents {
     /**
      * Event listener for HTTP server "listening" event.
      */
-    onListening () {
-        var addr = server.address();
-        var bind = (typeof addr === 'string')
-                ? 'pipe ' + addr : 'port ' + addr.port;
-        this.debug('Listening on ' + bind);
+     onListening (address) {
+        return () => {
+            var bind = (typeof address === 'string')
+                    ? 'pipe ' + address : 'port ' + address.port;
+            this.debug('Listening on ' + bind);
+        }
     }
 
 }

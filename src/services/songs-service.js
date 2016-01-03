@@ -1,8 +1,8 @@
-import repository from '../repository/SongsRepository';
+import SongsRepository from '../repository/songs-repository';
 
 class SongsService {
     constructor () {
-        repository = new SongsRepository();
+        this.repository = new SongsRepository();
     }
 
     getAll () {
