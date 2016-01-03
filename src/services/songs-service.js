@@ -13,12 +13,16 @@ class SongsService {
         return {};
     }
 
-    update (id, song) {
+    create (song) {
+        return {};
+    }
 
+    update (id, song) {
+        return {};
     }
 
     delete (id) {
-
+        return true;
     }
 }
 

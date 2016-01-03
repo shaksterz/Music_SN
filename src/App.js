@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Import all rest-routes to the express app
 for (var route of routes) {
     app.use(route.url, route.router);
 }

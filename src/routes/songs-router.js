@@ -6,24 +6,28 @@ var service = new SongsService();
 
 /* GET songs listing. */
 router.get('/', function (request, response, next) {
-    //service.doSomething();
-    response.send('song resource');
+    var songs = service.getAll();
+    response.send(songs);
 });
 
 router.put('/create', function (request, response, next) {
-    //service.create();
+    var song = service.create();
+    response.send(song);
 });
 
 router.get('/:songID', function (request, response, next) {
-    //service.get(request.params.songID);
+    var song = service.get(request.params.songID);
+    response.send(song);
 });
 
 router.post('/:songID', function (request, response, next) {
-    //service.update(request.params.songID, request.body);
+    var song = service.update(request.params.songID, request.body);
+    response.send(song);
 });
 
 router.delete('/:songID', function (request, response, next) {
-    //service.delete(request.params.songID);
+    var deleteResponse = service.delete(request.params.songID);
+    response.send(response);
 });
 
 export default router;
