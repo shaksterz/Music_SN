@@ -1,5 +1,6 @@
 var gulp = require("gulp");
-require('babel-register');
+//require("babel-plugin-streamline");
+require("babel-register");
 //var babel = require("gulp-babel");
 var eslint = require("gulp-eslint");
 var jasmine = require("gulp-jasmine");
@@ -31,12 +32,6 @@ gulp.task("lint", function () {
 //         .pipe(gulp.dest("dist"))
 // });
 
-// gulp.task("es6-test", function () {
-//     return gulp.src("spec/**/*.js")
-//         .pipe(babel())
-//         .pipe(gulp.dest("dist-test"))
-// });
-
 /**
  * "jasmine" - runs jasmine tests that are located in the "spec/tests" folder
  */
@@ -49,9 +44,7 @@ gulp.task("jasmine", function () {
         }));
 });
 
-gulp.task("default", function (callback) {
-    runSequence('lint', 'jasmine', callback);
-});
+gulp.task("default", ['lint', 'jasmine']);
 
 //Experimental: Awaiting testings
 gulp.task("publish", function () {
