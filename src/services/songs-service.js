@@ -1,38 +1,58 @@
 import Neo4jRepository from '../repository/neo4j-repository';
-
-import serverConfig from '../../server-config';
 import Song from '../model/nodes/song';
+import Artist from '../model/nodes/artist';
+import Album from '../model/nodes/album';
+import SongTransform from '../repository/data-modelling/song-transform';
 
 class SongsService {
     constructor () {
         this.repository = new Neo4jRepository();
+        this.songTransform = new SongTransform();
     }
 
     getAll (errorCallback, resultCallback) {
-        this.repository.query("MATCH (album:Album)-[contain:contains]->(song:Song)<-[created:made]-(artist:Artist) RETURN song, artist, created, contain", {},
-                (error) => errorCallback(error),
-                (retrievedSongs) => {
-                    resultCallback(retrievedSongs.map(
-                        (song) => new Song(song.title, song.link)));
-                }
-        );
+        var cypher = "MATCH (song:Song)<-[created:made]-(artist:Artist) " +
+                    "OPTIONAL MATCH (album:Album)-[contain:contains]->(song) " +
+                    "RETURN song, artist, created, contain, album"
+        this.repository.findNodes(cypher, {}, errorCallback, resultCallback);
     }
 
-    getSong (id) {
-        return {};
+    getSongByName (name, errorCallback, resultCallback) {
+        var cypher = "MATCH (song:Song) " +
+                     "OPTIONAL MATCH (artist:Artist)-[:made]->(song) " +
+                     "OPTIONAL MATCH (album:Album)-[:contains]->(song) "
+                     "WHERE song.name = {name} " +
+                     "RETURN song, artist, album";
+         var params = {
+             name: name,
+         };
+         this.repository.findNodes(cypher, params, errorCallback, resultCallback);
     }
 
-    create (song) {
-        return {};
+    getSongByNameAndArtist (name, artistName, errorCallback, resultCallback) {
+        var cypher = "MATCH (song:Song)<-[:made]-(artist:Artist) " +
+                     "OPTIONAL MATCH (album:Album)-[:contains]->(song) "
+                     "WHERE song.name = {name} AND artist.name = {artistName} " +
+                     "RETURN song, artist, album";
+        var params = {
+            name: name,
+            artistName: artistName
+        };
+        this.repository.findNodes(cypher, params, errorCallback, resultCallback);
     }
 
-    update (id, song) {
-        return {};
+    create (song, errorCallback, resultCallback) {
+        this.repository.createNode("Song", song, errorCallback, resultCallback);
     }
 
-    delete (id) {
-        return true;
+    update (id, song, errorCallback, resultCallback) {
+        this.repository.updateNode("Song", { id: id }, song, errorCallback, resultCallback);
     }
+
+    delete (id, errorCallback, resultCallback) {
+        this.repository.deleteNode("Song", { id: id }, errorCallback, resultCallback);
+    }
+
 }
 
 export default SongsService;

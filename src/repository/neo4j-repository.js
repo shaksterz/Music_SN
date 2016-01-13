@@ -1,41 +1,41 @@
-import neo4jServer from 'neo4j';
+import Neo4jServer from './neo4j-server';
 
-import serverConfig from '../../server-config';
-
-class Neo4jRepository {
+class Neo4jRepository extends Neo4jServer {
     constructor () {
-        this.repository = new neo4jServer.GraphDatabase({
-            url: serverConfig.neo4j.url,
-            auth: serverConfig.neo4j.auth
-        });
-        if (this.repository === null || this.repository === undefined)
-            throw new Error("Connection to Neo4j failed.");
+        super();
     }
 
-    query (cypher = "", params = {}, errorCallback, resultCallback) {
-        this.coreQuery(cypher, params, true, errorCallback, resultCallback);
+    createNode (label, properties, errorCallback, resultCallback) {
+        properties = { properties: properties };
+        super.query("CREATE (node:" + label + " {properties}) RETURN node", properties, errorCallback, resultCallback);
     }
 
-    fullQuery (cypher = "", params = {}, errorCallback, resultCallback) {
-        this.coreQuery(cypher, params, false, errorCallback, resultCallback);
+    updateNode (label, identifyingProperties, properties, errorCallback, resultCallback) {
+        properties = {
+            properties: properties,
+            identifyingProperties: identifyingProperties
+        };
+        super.query("MATCH (node:" + label + " {identifyingProperties}) SET node = {properties}",
+        properties, errorCallback, resultCallback);
     }
 
-    coreQuery (cypher = "", params = {}, lean = true, errorCallback, resultCallback) {
-        this.repository.cypher({
-            query: cypher,
-            params: params,
-            headers: {},
-            lean: lean
-        }, (error, retrievedObjects) => {
-            if (error) {
-                if (error instanceof TransientError) {
-                    //retry, but for now...
-                    errorCallback(error);
-                } else
-                    errorCallback(error);
-            } else
-                resultCallback(retrievedObjects);
-        });
+    deleteNode (label, identifyingProperties, errorCallback, resultCallback) {
+        var properties = {
+            identifyingProperties: identifyingProperties
+        };
+        super.query("MATCH (node:" + label + " {identifyingProperties}) DETACH DELETE node",
+        properties, errorCallback, resultCallback);
+    }
+
+    findNodes (cypher, params, transformer, errorCallback, resultCallback) {
+        this.repository.query(cypher, {},
+                (error) => errorCallback(error),
+                (data) => {
+                    var result = data.map(
+                        (item) => this.transformer.toObject(item));
+                    resultCallback(result);
+                }
+        );
     }
 }
 
