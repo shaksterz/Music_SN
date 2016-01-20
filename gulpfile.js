@@ -8,6 +8,7 @@ var awsPublish = require("gulp-awspublish");
 var expressServer = require("gulp-live-server");
 var jasmineConfig = require("./spec/support/jasmine");
 var runSequence = require("run-sequence");
+var typescriptCompiler = require("gulp-typescript");
 
 /**
  * "lint" - runs eslint on both the source code files and the jasmine spec test files
