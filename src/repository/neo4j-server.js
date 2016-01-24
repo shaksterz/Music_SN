@@ -12,15 +12,15 @@ class Neo4jServer {
             throw new Error("Connection to Neo4j failed.");
     }
 
-    query (cypher = "", params = {}, errorCallback, resultCallback) {
-        this._coreQuery(cypher, params, true, errorCallback, resultCallback);
+    query (cypher = "", params = {}, callback) {
+        this._coreQuery(cypher, params, true, callback);
     }
 
-    fullQuery (cypher = "", params = {}, errorCallback, resultCallback) {
-        this._coreQuery(cypher, params, false, errorCallback, resultCallback);
+    fullQuery (cypher = "", params = {}, callback) {
+        this._coreQuery(cypher, params, false, callback);
     }
 
-    _coreQuery (cypher = "", params = {}, lean = true, errorCallback, resultCallback) {
+    _coreQuery (cypher = "", params = {}, lean = true, callback) {
         this.repository.cypher({
             query: cypher,
             params: params,
@@ -29,12 +29,12 @@ class Neo4jServer {
         }, (error, retrievedObjects) => {
             if (error) {
                 if (error instanceof TransientError) {
-                    //retry, but for now...
-                    errorCallback(error);
+                    //should retry, but for now...
+                    callback(error, null);
                 } else
-                    errorCallback(error);
+                    callback(error, null);
             } else
-                resultCallback(retrievedObjects);
+                callback(null, retrievedObjects);
         });
     }
 }

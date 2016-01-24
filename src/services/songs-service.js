@@ -10,14 +10,14 @@ class SongsService {
         this.songTransform = new SongTransform();
     }
 
-    getAll (errorCallback, resultCallback) {
+    getAll (callback) {
         var cypher = "MATCH (song:Song)<-[created:made]-(artist:Artist) " +
-                    "OPTIONAL MATCH (album:Album)-[contain:contains]->(song) " +
-                    "RETURN song, artist, created, contain, album"
-        this.repository.findNodes(cypher, {}, errorCallback, resultCallback);
+                     "OPTIONAL MATCH (album:Album)-[contain:contains]->(song) " +
+                     "RETURN song, artist, created, contain, album"
+        this.repository.findNodes(cypher, {}, callback);
     }
 
-    getSongByName (name, errorCallback, resultCallback) {
+    getSongByName (name, callback) {
         var cypher = "MATCH (song:Song) " +
                      "OPTIONAL MATCH (artist:Artist)-[:made]->(song) " +
                      "OPTIONAL MATCH (album:Album)-[:contains]->(song) "
@@ -26,10 +26,10 @@ class SongsService {
          var params = {
              name: name,
          };
-         this.repository.findNodes(cypher, params, errorCallback, resultCallback);
+         this.repository.findNodes(cypher, params, callback);
     }
 
-    getSongByNameAndArtist (name, artistName, errorCallback, resultCallback) {
+    getSongByNameAndArtist (name, artistName, callback) {
         var cypher = "MATCH (song:Song)<-[:made]-(artist:Artist) " +
                      "OPTIONAL MATCH (album:Album)-[:contains]->(song) "
                      "WHERE song.name = {name} AND artist.name = {artistName} " +
@@ -38,19 +38,25 @@ class SongsService {
             name: name,
             artistName: artistName
         };
-        this.repository.findNodes(cypher, params, errorCallback, resultCallback);
+        this.repository.findNodes(cypher, params, callback);
     }
 
-    create (song, errorCallback, resultCallback) {
-        this.repository.createNode("Song", song, errorCallback, resultCallback);
+    create (song, callback) {
+        this.repository.createNode("Song", song, callback);
     }
 
-    update (id, song, errorCallback, resultCallback) {
-        this.repository.updateNode("Song", { id: id }, song, errorCallback, resultCallback);
+    update (id, song, callback) {
+        var params = {
+            id: id
+        };
+        this.repository.updateNode("Song", params, song, callback);
     }
 
-    delete (id, errorCallback, resultCallback) {
-        this.repository.deleteNode("Song", { id: id }, errorCallback, resultCallback);
+    delete (id, callback) {
+        var params = {
+            id: id
+        };
+        this.repository.deleteNode("Song", params, callback);
     }
 
 }

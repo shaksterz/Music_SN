@@ -1,4 +1,6 @@
-import Song from '../model/nodes/song';
+import Song from '../../model/nodes/song';
+import Artist from '../../model/nodes/artist';
+import Album from '../../model/nodes/album';
 
 class SongTransform {
     constructor () {

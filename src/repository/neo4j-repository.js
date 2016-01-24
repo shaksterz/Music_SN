@@ -5,35 +5,36 @@ class Neo4jRepository extends Neo4jServer {
         super();
     }
 
-    createNode (label, properties, errorCallback, resultCallback) {
+    createNode (label, properties, callback) {
         properties = { properties: properties };
-        super.query("CREATE (node:" + label + " {properties}) RETURN node", properties, errorCallback, resultCallback);
+        var cypher = "CREATE (node:" + label + " {properties}) RETURN node";
+        super.query(cypher, properties, callback);
     }
 
-    updateNode (label, identifyingProperties, properties, errorCallback, resultCallback) {
+    updateNode (label, identifyingProperties, properties, callback) {
         properties = {
             properties: properties,
             identifyingProperties: identifyingProperties
         };
-        super.query("MATCH (node:" + label + " {identifyingProperties}) SET node = {properties}",
-        properties, errorCallback, resultCallback);
+        var cypher = "MATCH (node:" + label + " {identifyingProperties}) SET node = {properties}";
+        super.query(cypher, properties, callback);
     }
 
-    deleteNode (label, identifyingProperties, errorCallback, resultCallback) {
+    deleteNode (label, identifyingProperties, callback) {
         var properties = {
             identifyingProperties: identifyingProperties
         };
-        super.query("MATCH (node:" + label + " {identifyingProperties}) DETACH DELETE node",
-        properties, errorCallback, resultCallback);
+        var cypher = "MATCH (node:" + label + " {identifyingProperties}) DETACH DELETE node";
+        super.query(cypher, properties, callback);
     }
 
-    findNodes (cypher, params, transformer, errorCallback, resultCallback) {
+    findNodes (cypher, params, transformer, callback) {
         this.repository.query(cypher, {},
-                (error) => errorCallback(error),
+                (error) => callback(error, null),
                 (data) => {
                     var result = data.map(
                         (item) => this.transformer.toObject(item));
-                    resultCallback(result);
+                    callback(null, result);
                 }
         );
     }

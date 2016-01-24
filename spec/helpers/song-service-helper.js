@@ -1,4 +1,5 @@
 import neo4j from 'neo4j';
+import serverConfig from '../../server-config';
 
 class SongServiceHelper {
     constructor () {
