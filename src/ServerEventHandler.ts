@@ -1,15 +1,10 @@
-import debug from 'debug';
-
-class ServerEvents {
-    constructor () {
-        this.debug = debug('Music_SN:server');
-    }
+class ServerEventHandler {
 
     /**
      * A function that normalises a port into a number, string, or false.
      */
-    normalizePort (val) {
-        var port = parseInt(val, 10);
+    normalizePort (val: any): any {
+        let port: number = parseInt(val, 10);
         if (isNaN(port)) {
             // named pipe
             return val;
@@ -24,21 +19,19 @@ class ServerEvents {
     /**
      * Event listener for HTTP server "error" event.
      */
-    onError (error) {
-        if (error.syscall !== 'listen') {
+    onError (error: any): void {
+        if (error.syscall !== "listen") {
             throw error;
         }
-        var bind = (typeof port === 'string')
-                ? 'Pipe ' + port : 'Port ' + port;
 
         // handle specific listen errors with friendly messages
         switch (error.code) {
-            case 'EACCES':
-                console.error(bind + ' requires elevated privileges');
+            case "EACCES":
+                console.error("Elevated privileges required.");
                 process.exit(1);
                 break;
-            case 'EADDRINUSE':
-                console.error(bind + ' is already in use');
+            case "EADDRINUSE":
+                console.error("Port is already in use");
                 process.exit(1);
                 break;
             default:
@@ -51,12 +44,12 @@ class ServerEvents {
      */
      onListening (address) {
         return () => {
-            var bind = (typeof address === 'string')
-                    ? 'pipe ' + address : 'port ' + address.port;
-            this.debug('Listening on ' + bind);
+            let bind = (typeof address === "string")
+                    ? "pipe " + address : "port " + address.port;
+            console.log("Listening on " + bind);
         }
     }
 
 }
 
-export default ServerEvents;
+export default ServerEventHandler;
